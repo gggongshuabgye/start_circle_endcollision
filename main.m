@@ -1,5 +1,5 @@
  clear; clc;
-% ÏÔÊ¾Îª¿ÆÑ§¼ÆÊı·¨£¬Ğ¡Êıµãºó±£Áô6Î»
+% æ˜¾ç¤ºä¸ºç§‘å­¦è®¡æ•°æ³•ï¼Œå°æ•°ç‚¹åä¿ç•™6ä½
 format longE;
 %%
 N=3;
@@ -10,7 +10,7 @@ Pmutation=0.15;       %%mutation probability
 LWID=2;
 Fsize=13;
 tic;
-%% »úÆ÷ÈËÄ£ĞÍ
+%% æœºå™¨äººæ¨¡å‹
 a1=0;a2=0;a3=0;a4=0;a5=0;a6=0;a7=0;
 d1=0.3;d2=0;d3=0.7;d4=-0.3;d5=0.7;d6=0;d7=0.3;
 %			 thetai    di      ai-1        alphai-1
@@ -25,73 +25,73 @@ L7 = Link([-pi/2    d7      a7              0]);
 robot=SerialLink([L1 L2 L3 L4 L5 L6 L7],'name','robot');
 
 %%
-% ¶¨ÒåÆğÊ¼µã
+% å®šä¹‰èµ·å§‹ç‚¹
 P_start=[1.61,0.15,0.15, 148*pi/180, -27*pi/180, 75*pi/180];
 % P_2=[1,-0.5,-0.45, 150*pi/180, -30*pi/180, 80*pi/180];
 % P_3=[1.5,0,0, 100*pi/180,0, 100*pi/180];
 P_end=[0,1,1,60*pi/180,30*pi/180,120*pi/180];
 circle1_pose=[1,1,0,100*pi/180,0*pi/180,100*pi/180];
 radius1=0.1;
-% ¼ÆËãÆ½ÃæµÄ·¨ÏòÁ¿
+% è®¡ç®—å¹³é¢çš„æ³•å‘é‡
 circle1_pose_O = [1, 1, 0];
  P1 = [1.61, 0.15, 0.15];
  P2 = [-0.5 , -1 , -0.45 ];
 %  P2 = [-0.5, -1, -0.45];
 % P2 = [1, -0.5, -0.45];
 normal_vector = cross(P1-circle1_pose_O , P2-circle1_pose_O );
-% ¸ù¾İ·¨ÏòÁ¿ºÍÒÑÖªµãOµÄ×ø±ê¹¹½¨Æ½Ãæ·½³Ì ax + by + cz + d = 0
+% æ ¹æ®æ³•å‘é‡å’Œå·²çŸ¥ç‚¹Oçš„åæ ‡æ„å»ºå¹³é¢æ–¹ç¨‹ ax + by + cz + d = 0
 a = normal_vector(1);
 b = normal_vector(2);
 c = normal_vector(3);
 d = -dot(normal_vector, circle1_pose_O );
 plane_eq = @(x, y, z) a*x + b*y + c*z + d; 
-% ¶¨ÒåÒ»¸ö×ø±ê·¶Î§
+% å®šä¹‰ä¸€ä¸ªåæ ‡èŒƒå›´
 [x, y] = meshgrid(-5:0.1:5, -5:0.1:5);
-% ¼ÆËãÆ½ÃæÉÏÃ¿¸öµãµÄzÖµ
+% è®¡ç®—å¹³é¢ä¸Šæ¯ä¸ªç‚¹çš„zå€¼
 z = (-a*x - b*y - d) / c;
 
-% % »æÖÆÆ½Ãæ
+% % ç»˜åˆ¶å¹³é¢
 figure(1);
 % surf(x, y, z);
 hold on;
-% »æÖÆÔ²ĞÄÎª[1, 1, 0]£¬°ë¾¶Îª1£¬ÇÒÓëÆ½Ãæ¹²ÃæµÄÔ²
+% ç»˜åˆ¶åœ†å¿ƒä¸º[1, 1, 0]ï¼ŒåŠå¾„ä¸º1ï¼Œä¸”ä¸å¹³é¢å…±é¢çš„åœ†
 theta = linspace(0 , 2*pi, 100);
 x_circle = circle1_pose_O (1) + radius1*cos(theta);
 y_circle = circle1_pose_O (2) + radius1*sin(theta);
 z_circle = (-a*x_circle - b*y_circle - d) / c;
 plot3(x_circle, y_circle, z_circle, 'r', 'LineWidth', 2);
 
-% È·±£ËùÓĞÖá¶¼¿É¼û²¢µ÷ÕûÊÓ½Ç
+% ç¡®ä¿æ‰€æœ‰è½´éƒ½å¯è§å¹¶è°ƒæ•´è§†è§’
 axis equal;
-view(3); % »òÊ¹ÓÃÆäËûÊÊºÏµÄÊÓ½ÇÀ´²é¿´Ô²ºÍÆ½Ãæ
+view(3); % æˆ–ä½¿ç”¨å…¶ä»–é€‚åˆçš„è§†è§’æ¥æŸ¥çœ‹åœ†å’Œå¹³é¢
 %%
-% ¶¨ÒåÇòĞÍÕÏ°­Îï
+% å®šä¹‰çƒå‹éšœç¢ç‰©
 % p_ob1 = [1.0; 0.5; 0; 0.15];
 % p_ob1 = [1.0; 0.8; 0.5; 0.15];
 p_ob1 = [1.2; 0.8; 0.6; 0.15];
-% ÇòĞÍÕÏ°­Îï°ë¾¶
+% çƒå‹éšœç¢ç‰©åŠå¾„
 r = p_ob1(4);
-% ÇòĞÍÕÏ°­ÎïÔ²ĞÄ
+% çƒå‹éšœç¢ç‰©åœ†å¿ƒ
 O = p_ob1(1:3);
 %%
 [Q,F1,F2,E1,E2]= FShortestPoint3D(P1, P2, circle1_pose_O, radius1);
 % [E,F,H] = compute_circle_enterpoint(P_start(1:3), P_end(1:3), center1, radius1);
 Q1=[Q(1),Q(2),Q(3),0,80*pi/180,80*pi/180];
 pose1 = [P_start;Q1;P_end];
-%% ÈÎÎñµãĞòÁĞ
-popm1=zeros(M,N);%µÚÒ»²¿·ÖÈ¾É«Ìå
+%% ä»»åŠ¡ç‚¹åºåˆ—
+popm1=zeros(M,N);%ç¬¬ä¸€éƒ¨åˆ†æŸ“è‰²ä½“
 for i=1:M
     popm1(i,:)=randperm(N);
 end
 popm1=Arrange(popm1');
 popm1=popm1';
-%% ÄæÔË¶¯Ñ§½â¹¹ĞÍ
+%% é€†è¿åŠ¨å­¦è§£æ„å‹
 pose=[P_start;Q1;P_end];
 %joint configuration corresponding to each waypoint
 for i=1:N
     jc{1,i}=joco(pose(i,:));% For waypoint i, there are 8 joint configurations, jc{1,i} is 8*7 matrix
 end
-% È·¶¨¹¹ĞÍ
+% ç¡®å®šæ„å‹
 for i= 1:(3*N)
     popm2(1,i) = round(rand); 
 end
@@ -100,32 +100,32 @@ for j=1:N % N---number of waypoints
     joicon{1,j}=jc{1,j}(a+1,:);
 end
 
-% ³õÊ¼»¯ÖÖÈº
+% åˆå§‹åŒ–ç§ç¾¤
 k=zeros(M,7*(N-1));
 min_value = -500;
 max_value = 500;
 for i=1:M
     k(i,:)=(max_value - min_value) * rand(1, 7*(N-1)) + min_value;
 end
-% ÈÎÎñµã¼¶ÈÆĞĞ±êÖ¾£¨¶¯Ì¬¸ù¾İÇĞÈëµãÊµ¼ÊÎ»ÖÃÉèÖÃ£©
+% ä»»åŠ¡ç‚¹çº§ç»•è¡Œæ ‡å¿—ï¼ˆåŠ¨æ€æ ¹æ®åˆ‡å…¥ç‚¹å®é™…ä½ç½®è®¾ç½®ï¼‰
 flag = zeros(M, N);
-cutin_index = 2;  % ¼ÙÉè¡°ÈÎÎñµã2¡±ÎªÇĞÈëµã
+cutin_index = 2;  % å‡è®¾â€œä»»åŠ¡ç‚¹2â€ä¸ºåˆ‡å…¥ç‚¹
 for i = 1:M
-    idx = find(popm1(i,:) == cutin_index);  % ÕÒµ½ÈÎÎñµã2ÔÚµÚ¼¸ÁĞ
+    idx = find(popm1(i,:) == cutin_index);  % æ‰¾åˆ°ä»»åŠ¡ç‚¹2åœ¨ç¬¬å‡ åˆ—
     if ~isempty(idx)
-        flag(i, idx) = 1;  % ÔÚ¸ÃÁĞÉèÖÃÈÆĞĞ±êÖ¾
+        flag(i, idx) = 1;  % åœ¨è¯¥åˆ—è®¾ç½®ç»•è¡Œæ ‡å¿—
     end
 end
-popm=zeros(M,N+N+7*(N-1));%×ÜÈ¾É«Ìå
+popm=zeros(M,N+N+7*(N-1));%æ€»æŸ“è‰²ä½“
 for i=1:M
     popm(i,:)= [popm1(i,:),flag(i, :), k(i,:)];
 end
-%% ÒÅ´«Ëã·¨
+%% é—ä¼ ç®—æ³•
 OPTE=0; 
 while C>0 
     C;
     OPTE=OPTE+1;
-    disp(['µ±Ç°µü´ú´ÎÊı OPTE: ', num2str(OPTE)]);
+    disp(['å½“å‰è¿­ä»£æ¬¡æ•° OPTE: ', num2str(OPTE)]);
     %selection---according to comparison with the random number
 % nn=0;% number of individuals after selection
 k = popm(:, N+1:end);
@@ -136,22 +136,22 @@ n=size(t_total,2);
 q = cell(200, 1); 
 for i=1:M0
     q{i}=zeros(7,n);
-    % ¶ÔÃ¿¸ö7¡Á1cellÔªËØÖ´ĞĞ²Ù×÷
+    % å¯¹æ¯ä¸ª7Ã—1cellå…ƒç´ æ‰§è¡Œæ“ä½œ
     for j=1:7
         for l=1:n
             q{i}(j,l) = theta_total{i}{j}(l);
         end
     end
 end
-%% Åö×²¼ì²â
+%% ç¢°æ’æ£€æµ‹
 f_co = cell(200, 1); 
 for i=1:M0
     f_co{i}=zeros(1,n);
     for j=1:n %guijidian
-        f_co{i}(1,j) = collision_check(q{i,1}(:,j)',p_ob1);%µÚi¸ö¸öÌåÖĞ¶ÔÓ¦µÄµÚjÁĞµÄ7¸ö¹Ø½ÚÖµ1*7
+        f_co{i}(1,j) = collision_check(q{i,1}(:,j)',p_ob1);%ç¬¬iä¸ªä¸ªä½“ä¸­å¯¹åº”çš„ç¬¬jåˆ—çš„7ä¸ªå…³èŠ‚å€¼1*7
     end
 end
-% µÚÒ»¸öÊÊÓ¦¶Èº¯Êı£¨Åö×²¼ì²â£©
+% ç¬¬ä¸€ä¸ªé€‚åº”åº¦å‡½æ•°ï¼ˆç¢°æ’æ£€æµ‹ï¼‰
 fob = zeros(200, 1); 
 for i=1:M0
     for j=1:n
@@ -163,7 +163,7 @@ for i=1:M0
         end
     end
 end
-%% ¼ÆËã¸÷¹Ø½Ú½Ç¶È±ä»¯×ÜÁ¿f_Q£¨¸÷¸ö¹Ø½Ú×ª¶¯½Ç¶È×îĞ¡£©  f_Q{l}(i,1)
+%% å…³èŠ‚è§’åº¦å˜åŒ–æ€»é‡f_Q{l}(i,1)
 f_Q = cell(200, 1); 
 for l=1:M0
     f_Q{l}=zeros(7,1);
@@ -175,7 +175,7 @@ for l=1:M0
         f_Q{l}(i,1)=sum_1;
     end
 end
-% µÚ¶ş¸öÊÊÓ¦¶Èº¯Êı£¨¸÷¹Ø½Ú×ª¶¯½Ç¶È×îĞ¡£©
+% ç¬¬äºŒä¸ªé€‚åº”åº¦å‡½æ•°ï¼ˆå„å…³èŠ‚è½¬åŠ¨è§’åº¦æœ€å°ï¼‰
 fit_2 = zeros(200, 1); 
 for i=1:M0
     sum_2=0;
@@ -184,7 +184,7 @@ for i=1:M0
     end
     fit_2(i,1)=sum_2;
 end
-%% ¼ÆËãÄ©¶ËÖ´ĞĞÆ÷ÔË¶¯¹ì¼£³¤¶Èf_L
+%% æœ«ç«¯æ‰§è¡Œå™¨è½¨è¿¹é•¿åº¦f_L
 p_x=cell(200,1);
 p_y=cell(200,1);
 p_z=cell(200,1);
@@ -204,55 +204,55 @@ for i=1:M0
     end
     f_L(i,1)=sum_3;
 end
-% µÚÈı¸öÊÊÓ¦¶Èº¯Êı£¨Ä©¶ËÖ´ĞĞÆ÷¹ì¼£×îĞ¡£©
+% ç¬¬ä¸‰ä¸ªé€‚åº”åº¦å‡½æ•°ï¼ˆæœ«ç«¯æ‰§è¡Œå™¨è½¨è¿¹æœ€å°ï¼‰
 fit_3 = f_L;
 
-%%ÊÊÓ¦¶Èº¯Êı
+%%é€‚åº”åº¦å‡½æ•°
 f_k = zeros(200,1);
 for i=1:M0
     f_k(i,1) = -fob(i,1)/(0.1*fit_2(i,1)+fit_3(i,1));
 end
-%% Ñ¡Ôñ selection
-%--É¸Ñ¡ÊÊÓ¦¶ÈÎª0µÄ¸öÌå
+%% é€‰æ‹© selection
+%--ç­›é€‰é€‚åº”åº¦ä¸º0çš„ä¸ªä½“
 non_zero_fitness_indices = find(f_k ~= 0);
-popm_except_0 = popm(non_zero_fitness_indices,:);%----É¸Ñ¡µô0ÖµºóµÄÖÖÈº
+popm_except_0 = popm(non_zero_fitness_indices,:);%----ç­›é€‰æ‰0å€¼åçš„ç§ç¾¤
 fit_except_0 = f_k(non_zero_fitness_indices,:);
 [popm_sel,fit_sel] = selection(fit_except_0,popm_except_0);
 %[k_sel,fit_sel] = selection(fit_except_0,k_except_0);
 nn = size(popm_sel,1);
 
-%%Ã¿´ÎÑ¡Ôñ¶¼±£´æ×îÓÅµÄÖÖÈº%%Save the optimized individual after selection
+%%æ¯æ¬¡é€‰æ‹©éƒ½ä¿å­˜æœ€ä¼˜çš„ç§ç¾¤%%Save the optimized individual after selection
 % % popm_sel=popm_sel(1:nn,:);%population after selection
 [fit_sel_min, fit_sel_min_index]=min(fit_sel);% optimized path length value and the corresponding individual after selection
 [fit_sel_max, fit_sel_max_index]=max(fit_sel); 
 popm_sel(fit_sel_max_index,:) = popm_sel(fit_sel_min_index,:);% add the optimized individua to the new population
 
 %------crossover 
-popm_sel = Cross(popm_sel, Pc);% ¼òµ¥½»²æ
+popm_sel = Cross(popm_sel, Pc);% ç®€å•äº¤å‰
 
 %------mutation
-% ±äÒì·ù¶È
+% å˜å¼‚å¹…åº¦
 mutation_range=10;
 popm_sel = Mutation(popm_sel, Pmutation, mutation_range);
 
-%------ÖØĞÂ²åÈë×Ó´úµÄĞÂÖÖÈº
+%------é‡æ–°æ’å…¥å­ä»£çš„æ–°ç§ç¾¤
 NSel=size(popm_sel,1);
 NIND=size(k,1);  %200
-[f,index]=sort(f_k);   %Ô­ÏÈµÄÖÖÈºµÄÊÊÓ¦¶ÈÓĞĞ¡µ½´ó½øĞĞÅÅÁĞ
-popm_new=[popm(index(1:NIND-NSel),:);popm_sel]; %×îÖÕµÃµ½ĞÂÖÖÈº200
-% ========== ĞŞÕıÃ¿¸ö¸öÌåµÄ flag£¨ÈÆĞĞ±êÖ¾£© ========== 
+[f,index]=sort(f_k);   %åŸå…ˆçš„ç§ç¾¤çš„é€‚åº”åº¦æœ‰å°åˆ°å¤§è¿›è¡Œæ’åˆ—
+popm_new=[popm(index(1:NIND-NSel),:);popm_sel]; %æœ€ç»ˆå¾—åˆ°æ–°ç§ç¾¤200
+% ========== ä¿®æ­£æ¯ä¸ªä¸ªä½“çš„ flagï¼ˆç»•è¡Œæ ‡å¿—ï¼‰ ========== 
 M1=size(popm_new,1);
-popm1_new = popm_new(:, 1:N);  % ÌáÈ¡ÈÎÎñË³Ğò²¿·Ö
-flag_new = zeros(M1, N);       % ³õÊ¼»¯ flag
+popm1_new = popm_new(:, 1:N);  % æå–ä»»åŠ¡é¡ºåºéƒ¨åˆ†
+flag_new = zeros(M1, N);       % åˆå§‹åŒ– flag
 for i = 1:M1
-    idx = find(popm1_new(i,:) == cutin_index);  % ÕÒµ½ÈÎÎñµã2ÔÚ¸öÌåÖĞµÄÊµ¼ÊÎ»ÖÃ
+    idx = find(popm1_new(i,:) == cutin_index);  % æ‰¾åˆ°ä»»åŠ¡ç‚¹2åœ¨ä¸ªä½“ä¸­çš„å®é™…ä½ç½®
     if ~isempty(idx)
-        flag_new(i, idx) = 1;  % ÔÚ¸ÃÎ»ÖÃÉèÖÃÈÆĞĞ
+        flag_new(i, idx) = 1;  % åœ¨è¯¥ä½ç½®è®¾ç½®ç»•è¡Œ
     end
 end
-% Ìæ»»Ô­À´µÄ flag ²¿·Ö
-popm_new(:, N+1:N+N) = flag_new;  % ¸üĞÂ×ÜÈ¾É«ÌåÖĞµÄ flag
-%% ¾­¹ıÑ¡Ôñ¡¢½»²æ¡¢±äÒìºóÖØĞÂ½øĞĞÊÊÓ¦¶È¼ÆËã
+% æ›¿æ¢åŸæ¥çš„ flag éƒ¨åˆ†
+popm_new(:, N+1:N+N) = flag_new;  % æ›´æ–°æ€»æŸ“è‰²ä½“ä¸­çš„ flag
+%% ç»è¿‡é€‰æ‹©ã€äº¤å‰ã€å˜å¼‚åé‡æ–°è¿›è¡Œé€‚åº”åº¦è®¡ç®—
 
 k_new = popm_new(:, N+1:end);
 [theta_total_new, dq_total_new, ddq_total_new, t_total_new] = multi_liuci_planning(joicon, popm_new, M1);
@@ -261,14 +261,14 @@ n_new=size(t_total_new,2);
 q_new = cell(200, 1); 
 for i=1:M1
     q_new{i}=zeros(7,n_new);
-    % ¶ÔÃ¿¸ö7¡Á1cellÔªËØÖ´ĞĞ²Ù×÷
+    % å¯¹æ¯ä¸ª7Ã—1cellå…ƒç´ æ‰§è¡Œæ“ä½œ
     for j=1:7
         for l=1:n_new
             q_new{i}(j,l) = theta_total_new{i}{j}(l);
         end
     end
 end
-% Åö×²¼ì²â
+% ç¢°æ’æ£€æµ‹
 f_co_new = cell(200, 1); 
 for i=1:M1
     f_co_new{i}=zeros(1,n);
@@ -276,7 +276,7 @@ for i=1:M1
         f_co_new{i}(1,j) = collision_check(q_new{i,1}(:,j)',p_ob1);
     end
 end
-% µÚÒ»¸öÊÊÓ¦¶Èº¯Êı£¨Åö×²¼ì²â£©
+% ç¬¬ä¸€ä¸ªé€‚åº”åº¦å‡½æ•°ï¼ˆç¢°æ’æ£€æµ‹ï¼‰
 fob_new = zeros(200, 1); 
 for i=1:M1
     for j=1:n_new
@@ -299,7 +299,7 @@ for l=1:M1
         f_Q_new{l}(i,1)=sum_1_new;
     end
 end
-% µÚ¶ş¸öÊÊÓ¦¶Èº¯Êı£¨¸÷¹Ø½Ú×ª¶¯½Ç¶È×îĞ¡£©
+% ç¬¬äºŒä¸ªé€‚åº”åº¦å‡½æ•°ï¼ˆå„å…³èŠ‚è½¬åŠ¨è§’åº¦æœ€å°ï¼‰
 fit_2_new = zeros(200, 1); 
 for i=1:M1
     sum_2_new=0;
@@ -327,25 +327,25 @@ for i=1:M1
     end
     f_L_new(i,1)=sum_3_new;
 end
-% µÚÈı¸öÊÊÓ¦¶Èº¯Êı£¨Ä©¶ËÖ´ĞĞÆ÷¹ì¼£×îĞ¡£©
+% ç¬¬ä¸‰ä¸ªé€‚åº”åº¦å‡½æ•°ï¼ˆæœ«ç«¯æ‰§è¡Œå™¨è½¨è¿¹æœ€å°ï¼‰
 fit_3_new = f_L_new;
-% ĞÂµÄÊÊÓ¦¶Èº¯Êı
+% æ–°çš„é€‚åº”åº¦å‡½æ•°
 f_k_new = zeros(200,1);
 for i=1:M1
     f_k_new(i,1) = -fob_new(i,1)/(0.1*fit_2_new(i,1)+fit_3_new(i,1));
 end
 
-% Ñ¡ÔñĞÂµÄÊÊÓ¦¶ÈµÄ×îĞ¡Öµ
+% é€‰æ‹©æ–°çš„é€‚åº”åº¦çš„æœ€å°å€¼
 minf_k_new=min(f_k_new);% minimum length of the new population
-% Ñ¡Ôñ³ö¸÷´úµÄ×îÓÅÊÊÓ¦¶È
+% é€‰æ‹©å‡ºå„ä»£çš„æœ€ä¼˜é€‚åº”åº¦
 f_k_new_min(OPTE,1)=minf_k_new;% save the minimum length value of the (C+1)th  iteration
 % % fitness=fit(Tem1,m,maxtem1,mintem1);% the final fitness value
 rr=find(f_k_new==minf_k_new);% the number of indivilual with minimum path length
-% ×îÓÅµÄk½â
+% æœ€ä¼˜çš„kè§£
 popmop=popm_new(rr(1,1),:); % % %the final optimal chromosome
-% ¼ÆËã×îÓÅ²ÎÊık¶ÔÓ¦µÄ¹Ø½Ú×ª¶¯×ÜÁ¿f_Q_op
+% è®¡ç®—æœ€ä¼˜å‚æ•°kå¯¹åº”çš„å…³èŠ‚è½¬åŠ¨æ€»é‡f_Q_op
 f_Q_op = fit_2_new(rr(1,1),:);
-% ¼ÆËã×îÓÅ²ÎÊık¶ÔÓ¦µÄ¹Ø½Ú×ª¶¯×ÜÁ¿f_L_op
+% è®¡ç®—æœ€ä¼˜å‚æ•°kå¯¹åº”çš„å…³èŠ‚è½¬åŠ¨æ€»é‡f_L_op
 f_L_op = fit_3_new(rr(1,1),:);
 k=[];
 popm=popm_new;% the final population
@@ -355,15 +355,15 @@ kkk=1:1:OPTE;
 figure(2)
 plot(kkk,f_k_new_min','LineWidth',LWID);
 grid on
-xlabel('µü´ú´ÎÊı')
-ylabel ('ÊÊÓ¦¶ÈÖµ')
+xlabel('è¿­ä»£æ¬¡æ•°')
+ylabel ('é€‚åº”åº¦å€¼')
 
 
-% ¼ÆËã×îÓÅ¸öÌå¶ÔÓ¦µÄÖµ
+% è®¡ç®—æœ€ä¼˜ä¸ªä½“å¯¹åº”çš„å€¼
 Mop=size(popmop,1);
-kop = popmop(:, N+1:end);
+kop = popmop(:, N+N+1:end);
 [theta_total_op, dq_total_op, ddq_total_op, t_total_op] = multi_liuci_planning(joicon, popmop, Mop);
-% [theta_op,dq_op,ddq_op,t_values_op] = liuci_planning(joicon,kop,Mop); % theta_op----1¡Á1cell,cell:7¡Á1cell,cell:1¡Á21double
+% [theta_op,dq_op,ddq_op,t_values_op] = liuci_planning(joicon,kop,Mop); % theta_op----1Ã—1cell,cell:7Ã—1cell,cell:1Ã—21double
 xend=t_total_op(1,end);
 
 EEpose=DHkine_1(theta_total_op{1,1});
@@ -383,33 +383,34 @@ for i=1:N
 end
 
 qs = zeros(7,size(t_total_op,2));
-% Ñ­»·±éÀú theta_op µÄÃ¿¸öÔªËØ£¬²¢½«ÆäÌî³äµ½ qs ÖĞ
+% å¾ªç¯éå† theta_op çš„æ¯ä¸ªå…ƒç´ ï¼Œå¹¶å°†å…¶å¡«å……åˆ° qs ä¸­
 for i = 1:7
     for j = 1:size(t_total_op,2)
-        % »ñÈ¡ theta_op ÖĞµÄÊı¾İ£¬²¢¸³Öµ¸ø qs
+        % è·å– theta_op ä¸­çš„æ•°æ®ï¼Œå¹¶èµ‹å€¼ç»™ qs
         qs(i, j) = theta_total_op{1,1}{i,1}(1,j);
     end
 end
 qs = qs';
-% % ¼ÆËã¹Ø½Ú2µÄ¹ì¼£±ä»¯
+% % è®¡ç®—å…³èŠ‚2çš„è½¨è¿¹å˜åŒ–
 % EEpose_q2=DHkine_q2(theta_total_op{1,1});
-% % ¼ÆËã¹Ø½Ú3µÄ¹ì¼£±ä»¯
+% % è®¡ç®—å…³èŠ‚3çš„è½¨è¿¹å˜åŒ–
 % EEpose_q3=DHkine_q3(theta_total_op{1,1});
-% % ¼ÆËã¹Ø½Ú4µÄ¹ì¼£±ä»¯
+% % è®¡ç®—å…³èŠ‚4çš„è½¨è¿¹å˜åŒ–
 % EEpose_q4=DHkine_q4(theta_total_op{1,1});
-% % ¼ÆËã¹Ø½Ú5µÄ¹ì¼£±ä»¯
+% % è®¡ç®—å…³èŠ‚5çš„è½¨è¿¹å˜åŒ–
 % EEpose_q5=DHkine_q5(theta_total_op{1,1});
 
 toc;
-%% Ãè»æ¸÷¹Ø½ÚµÄÔË¶¯¹ì¼£ÇúÏß
+%% æç»˜å„å…³èŠ‚çš„è¿åŠ¨è½¨è¿¹æ›²çº¿
 figure(1)
 hold on;
 plot3(P_start(1),P_start(2),P_start(3),'go', 'MarkerSize', 5, 'MarkerFaceColor', 'g');
- text(P_start(1),P_start(2),P_start(3));
+ text(P_start(1),P_start(2),P_start(3),'Start Point');
 plot3(Q1(1),Q1(2),Q1(3),'go', 'MarkerSize', 5, 'MarkerFaceColor', 'g');
+text(Q1(1),Q1(2),Q1(3),'Entry Point');
 plot3(P_end(1),P_end(2),P_end(3),'go', 'MarkerSize', 5, 'MarkerFaceColor', 'g');
 % plot3(P_4(1),P_4(2),P_4(3),'go', 'MarkerSize', 5, 'MarkerFaceColor', 'g');
-text(P_end(1),P_end(2),P_end(3));
+text(P_end(1),P_end(2),P_end(3),'End Point');
 robot.plot(qs(10,:));
 plot_sphere(p_ob1(1:3), p_ob1(4));
 hold on;
