@@ -1,26 +1,26 @@
 function [theta_total, dq_total, ddq_total, t_total] = multi_liuci_planning(joicon, popm, M)
 
-% ÊäÈë
-% joicon: 1¡ÁN cell£¬Ã¿¸öcellÊÇ1¡Á7¹Ì¶¨¹¹ĞÍ
-% popm: È¾É«Ìå M ¡Á (N + 7*(N-1))£¬Ç°NÁĞÊÇË³Ğò£¬ºóÃæÊÇÃ¿¶Î7¸öK
-% M: ÖÖÈºÊı
+% è¾“å…¥
+% joicon: 1Ã—N cellï¼Œæ¯ä¸ªcellæ˜¯1Ã—7å›ºå®šæ„å‹
+% popm: æŸ“è‰²ä½“ M Ã— (N + 7*(N-1))ï¼Œå‰Nåˆ—æ˜¯é¡ºåºï¼Œåé¢æ˜¯æ¯æ®µ7ä¸ªK
+% M: ç§ç¾¤æ•°
 
 theta_total = cell(M,1);
 dq_total = cell(M,1);
 ddq_total = cell(M,1);
 t_total = []; 
-N = length(joicon); % ÈÎÎñµãÊıÁ¿
-% total_segments = N - 1; % ×Ü¶ÎÊı
-% points_per_segment = 51; % Ã¿¶Î¹ì¼£µÄ²åÖµµãÊı
-% total_points = total_segments * points_per_segment; % ×ÜÊ±¼äµãÊı 
-  % Ô¤·ÖÅäÊ±¼ä¾ØÕó
-%  t_total = zeros(1, total_points); % ÓÃÓÚ´æ´¢ËùÓĞ¸öÌåµÄÊ±¼äµã
+N = length(joicon); % ä»»åŠ¡ç‚¹æ•°é‡
+% total_segments = N - 1; % æ€»æ®µæ•°
+% points_per_segment = 51; % æ¯æ®µè½¨è¿¹çš„æ’å€¼ç‚¹æ•°
+% total_points = total_segments * points_per_segment; % æ€»æ—¶é—´ç‚¹æ•° 
+  % é¢„åˆ†é…æ—¶é—´çŸ©é˜µ
+%  t_total = zeros(1, total_points); % ç”¨äºå­˜å‚¨æ‰€æœ‰ä¸ªä½“çš„æ—¶é—´ç‚¹
 for i = 1:M
-    task_seq = popm(i, 1:N); % È¡Ë³Ğò
-    flag_seq = popm(i, N+1:2*N); % ÈÆĞĞ±êÖ¾
-    k_all = popm(i, 2*N+1:end); % ¶à¶Îk
+    task_seq = popm(i, 1:N); % å–é¡ºåº
+    flag_seq = popm(i, N+1:2*N); % ç»•è¡Œæ ‡å¿—
+    k_all = popm(i, 2*N+1:end); % å¤šæ®µk
     
-    % ¸ù¾İË³ĞòÅÅÁĞ¹Ø½ÚÅäÖÃ
+    % æ ¹æ®é¡ºåºæ’åˆ—å…³èŠ‚é…ç½®
     q_seq = zeros(N,7);
     for j = 1:N
         q_seq(j,:) = joicon{task_seq(j)};
@@ -41,8 +41,8 @@ for i = 1:M
     for seg = 1:N-1
         q_start = q_seq(seg,:);
         q_end = q_seq(seg+1,:);
-        k_seg = k_all((seg-1)*7+1 : seg*7); % Ã¿¶ÎµÄk
-        % ---- Õı³£¹ì¼£¶Î ----
+        k_seg = k_all((seg-1)*7+1 : seg*7); % æ¯æ®µçš„k
+        % ---- æ­£å¸¸è½¨è¿¹æ®µ ----
         [theta_seg, dq_seg, ddq_seg, t_seg] = liuci_single(q_start, q_end, k_seg);
         t_seg = t_seg + current_time;
         current_time = t_seg(end);
@@ -53,10 +53,10 @@ for i = 1:M
             ddq_each{j} = [ddq_each{j}, ddq_seg{j}];
         end
         t_each = [t_each, t_seg];
-                % ---- ÈôÏÂÒ»¸öÈÎÎñµã£¨ÖÕµã£©ÊÇÇĞÈëµã£¬Ôò´Ë¶Îºó½ÓÈÆĞĞ¹ì¼£ ----
+                % ---- è‹¥ä¸‹ä¸€ä¸ªä»»åŠ¡ç‚¹ï¼ˆç»ˆç‚¹ï¼‰æ˜¯åˆ‡å…¥ç‚¹ï¼Œåˆ™æ­¤æ®µåæ¥ç»•è¡Œè½¨è¿¹ ----
         rx_flag = (flag_seq(seg+1) == 1);
         if rx_flag
-            [theta_c, dq_c, ddq_c, t_c] = circular_path(q_end, current_time);  % ÓÃÖÕµã×ËÌ¬´«Èë
+            [theta_c, dq_c, ddq_c, t_c] = circular_path(q_end, current_time);  % ç”¨ç»ˆç‚¹å§¿æ€ä¼ å…¥
             t_c = t_c + current_time;
             current_time = t_c(end);
 
@@ -68,8 +68,8 @@ for i = 1:M
             t_each = [t_each, t_c];
         end
     end
-%         %%  ÈÆĞĞ¶Î
-%         rx_flag =  (flag_seq(task_seq(seg)) == 1);  % ÅĞ¶Ïµ±Ç°ÈÎÎñµãÊÇ·ñÈÆĞĞ
+%         %%  ç»•è¡Œæ®µ
+%         rx_flag =  (flag_seq(task_seq(seg)) == 1);  % åˆ¤æ–­å½“å‰ä»»åŠ¡ç‚¹æ˜¯å¦ç»•è¡Œ
 %         if rx_flag
 %             [theta_c, dq_c, ddq_c, t_c] = circular_path(q_start, current_time);
 %             for j = 1:7
@@ -80,15 +80,15 @@ for i = 1:M
 %             t_each = [t_each, t_c];
 %             current_time = t_c(end);
 %         end
-%         %% Õı³£¹ì¼£
+%         %% æ­£å¸¸è½¨è¿¹
 %         
 %         [theta_seg, dq_seg, ddq_seg, t_seg] = liuci_single(q_start, q_end, k_seg);
 % 
-%         % Ê±¼äÀÛ¼Ó
+%         % æ—¶é—´ç´¯åŠ 
 %         t_seg = t_seg + current_time;
 %         current_time = t_seg(end);
 % 
-%         % Æ´½Ó¹ì¼£
+%         % æ‹¼æ¥è½¨è¿¹
 %         for j = 1:7
 %             theta_each{j} = [theta_each{j}, theta_seg{j}];
 %             dq_each{j} = [dq_each{j}, dq_seg{j}];
@@ -101,12 +101,12 @@ for i = 1:M
     dq_total{i} = dq_each;
     ddq_total{i} = ddq_each;
 %     t_total{i} = t_each;
-    % ¼ÇÂ¼µÚÒ»¸ö¸öÌåµÄÊ±¼äµãÊı
+    % è®°å½•ç¬¬ä¸€ä¸ªä¸ªä½“çš„æ—¶é—´ç‚¹æ•°
     if i == 1
         t_total = t_each;
     else
        if length(t_each) ~= length(t_total)
-            error("µÚ %d ¸öÌå¹ì¼£µãÊı²»Ò»ÖÂ£º%d ¡Ù %d", i, length(t_each), length(t_total));
+            error("ç¬¬ %d ä¸ªä½“è½¨è¿¹ç‚¹æ•°ä¸ä¸€è‡´ï¼š%d â‰  %d", i, length(t_each), length(t_total));
         end
     end
 end
